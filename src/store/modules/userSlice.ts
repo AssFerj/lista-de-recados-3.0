@@ -1,12 +1,26 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import LogedUserType from '../../types/LogedUserType';
+import { login } from '../../services/api.service';
+
+export const loginAction = createAsyncThunk('logedUser/login', async (props: LogedUserType) => {
+  const result = await login(props);
+  return result;
+})
 
 const userSlice = createSlice({
   name: 'logedUser',
-  initialState: {
-    // id: '76030930-e007-4e99-8a7b-a2af0903a953'
-  } as LogedUserType,
-  reducers: {}
+  initialState: {} as LogedUserType,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(loginAction.pending, () => {
+      console.log('Login started');
+      
+    })
+    builder.addCase(loginAction.fulfilled, (_, action) => {
+      console.log('Login ended');
+      return action.payload.data;
+    })
+  }
 });
 
 export default userSlice.reducer;

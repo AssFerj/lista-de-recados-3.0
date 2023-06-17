@@ -1,7 +1,6 @@
-type LogedUserType = {
-    id: string;
+interface LogedUserType {
     email: string;
     password: string;
-  };
+  }
   
   export default LogedUserType;

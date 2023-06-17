@@ -1,20 +1,17 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
+import { loginAction } from '../store/modules/userSlice';
 
 function Copyright(props: any) {
   return (
@@ -30,30 +27,28 @@ function Copyright(props: any) {
 }
 
 export default function SignIn() {
+  const dispatch = useDispatch<any>();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const logedUser = useSelector((state: any)=> state.logedUserReducer);
-  // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   const data = new FormData(event.currentTarget);
-  //   console.log({
-  //     email: data.get('email'),
-  //     password: data.get('password'),
-  //   });
-  // };
 
   useEffect(() => {
       if(logedUser.id){
       navigate('/home');
       return;
     }
-  }, []);
+  }, [logedUser, navigate]);
 
   const submitLogin = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(email);
-    console.log(password);
+    const logUser = {
+      email,
+      password
+    }
+    dispatch(loginAction(logUser));
+    navigate('/home');
+    return;
   };
 
   return (
@@ -81,6 +76,7 @@ export default function SignIn() {
             label="Email"
             name="email"
             autoComplete="email"
+            type='email'
             autoFocus
             value={email}
             onChange={(e)=>setEmail(e.target.value)}
@@ -106,13 +102,8 @@ export default function SignIn() {
             Entrar
           </Button>
           <Grid container>
-            {/* <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid> */}
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/cadastro" variant="body2">
                 {"Não tem uma conta? Cadastre-se"}
               </Link>
             </Grid>
