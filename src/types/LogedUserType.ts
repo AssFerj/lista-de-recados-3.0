@@ -1,4 +1,5 @@
 interface LogedUserType {
+    id?:string;
     email: string;
     password: string;
   }

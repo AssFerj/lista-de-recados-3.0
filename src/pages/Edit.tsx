@@ -8,6 +8,7 @@ const Edit: React.FC<EditProps> = ({ data }) => {
   return (
     <React.Fragment>
       <h1>Edição</h1>
+      {data}
     </React.Fragment>
   );
 };

@@ -18,8 +18,7 @@ const usersSlice = createSlice({
     })
     builder.addCase(listTaskAction.fulfilled, (_, action) => {
       console.log('Create user ended');
-      console.log(action.payload);
-      return action.payload;
+      return action.payload.data;
     })
   }
 });

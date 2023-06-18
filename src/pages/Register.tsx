@@ -9,9 +9,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
-import { loginAction } from '../store/modules/userSlice';
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 import { createUser } from '../services/api.service';
 
 function Copyright(props: any) {
@@ -42,7 +41,7 @@ export default function SignUp() {
       lastName,
       email,
       password
-    }
+    }   
     dispatch(createUser(userToCreate));
     navigate('/');
     return;

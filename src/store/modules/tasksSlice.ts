@@ -23,7 +23,7 @@ export const tasksSlice = createSlice({
     })
     builder.addCase(listTaskAction.fulfilled, (_, action) => {
       console.log('List Task ended');
-      return action.payload;
+      return action.payload.data;
     })
   }
 })
