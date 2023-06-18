@@ -10,7 +10,7 @@ const Home: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<any>();
   const state = useSelector((state: RootState) => state.tasksReducer);
-  const logedUser = useSelector((state: RootState)=> state.logedUserReducer);  
+  const logedUser = useSelector((state: RootState)=> state.logedUserReducer); 
   
   useEffect(() => {
     const isUserLoged = !!logedUser.id;
@@ -19,7 +19,9 @@ const Home: React.FC = () => {
       navigate('/');
       return;
     }
-    dispatch(listTaskAction({id: logedUser.id}));
+    if(logedUser.id){
+      dispatch(listTaskAction({id: logedUser.id}));
+    }
   }, [dispatch, logedUser, navigate]);
 
 
