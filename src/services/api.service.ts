@@ -56,3 +56,14 @@ export async function editTasks(props: TaskType): Promise<any> {
         return error.response.data;
     }
 }
+
+export async function deleteTasks(props: TaskType): Promise<any> {
+    try {
+        const result = await api.delete(`/users/${props.userId}/tasks/${props.id}`);
+        // console.log(result.data);
+        
+        return result.data;
+    } catch (error: any) {
+        return error.response.data;
+    }
+}

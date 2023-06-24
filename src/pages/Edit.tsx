@@ -1,50 +1,34 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 
 const Edit: React.FC = () => {
-  const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleEditTask = () => {
+    // if(logedUser.id){
+    //   const logedUserId = logedUser.id
+    //   const editTask: TaskType = {
+    //     userId: logedUserId,
+    //     description: description
+    //   }
+    //   // dispatch(editTaskAction(editTask));
+    // }
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
   return (
     <React.Fragment>
-      <h1>Edição</h1>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open form dialog
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Subscribe</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            To subscribe to this website, please enter your email address here. We
-            will send updates occasionally.
-          </DialogContentText>
+      <h1>Editar recado</h1>
           <TextField
             autoFocus
             margin="dense"
             id="name"
-            label="Email Address"
-            type="email"
+            label="Descrição do recado"
+            type="text"
             fullWidth
             variant="standard"
           />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Subscribe</Button>
-        </DialogActions>
-      </Dialog>
+          <Button variant='contained' sx={{marginTop: 2}} onClick={handleEditTask}>Editar</Button>
+
     </React.Fragment>
   );
 };

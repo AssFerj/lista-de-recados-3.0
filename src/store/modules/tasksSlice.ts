@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { listTasks } from '../../services/api.service';
+import { deleteTasks, editTasks, listTasks } from '../../services/api.service';
 import Task from '../../types/TaskType';
+import TaskType from '../../types/TaskType';
 
 interface ListTaskProps {
   id: string;
@@ -11,6 +12,15 @@ export const listTaskAction = createAsyncThunk('tasks/list', async (props: ListT
   return result;
 });
 
+export const editTaskAction = createAsyncThunk('tasks/edit', async (props: TaskType) => {
+  const result = await editTasks(props);
+  return result;
+});
+
+export const deleteTaskAction = createAsyncThunk('tasks/delete', async (props: TaskType) => {
+  const result = await deleteTasks(props);
+  return result;
+});
 
 export const tasksSlice = createSlice({
   name: 'tasks',
@@ -23,6 +33,22 @@ export const tasksSlice = createSlice({
     })
     builder.addCase(listTaskAction.fulfilled, (_, action) => {
       console.log('List Task ended');
+      return action.payload.data;
+    })
+    builder.addCase(editTaskAction.pending, () => {
+      console.log('Edit Task started');
+      
+    })
+    builder.addCase(editTaskAction.fulfilled, (_, action) => {
+      console.log('Edit Task ended');
+      return action.payload.data;
+    })
+    builder.addCase(deleteTaskAction.pending, () => {
+      console.log('Delete Task started');
+      
+    })
+    builder.addCase(deleteTaskAction.fulfilled, (_, action) => {
+      console.log('Delete Task ended');
       return action.payload.data;
     })
   }

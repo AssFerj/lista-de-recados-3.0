@@ -1,6 +1,6 @@
 interface TaskType {
-    userId: string;
-    id: string;
+    userId?: string;
+    id?: string;
     description: string;
   }
   

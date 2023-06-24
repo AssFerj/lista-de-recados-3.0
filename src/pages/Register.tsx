@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { createUser } from '../services/api.service';
+import { createUserAction } from '../store/modules/usersSlice';
 
 function Copyright(props: any) {
   return (
@@ -42,7 +43,7 @@ export default function SignUp() {
       email,
       password
     }   
-    dispatch(createUser(userToCreate));
+    dispatch(createUserAction(userToCreate));
     navigate('/');
     return;
   };
