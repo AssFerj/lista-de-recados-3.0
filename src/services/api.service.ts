@@ -35,6 +35,17 @@ export async function login(props: LogedUserType): Promise<ApiResponse> {
     }
 }
 
+export async function createTask(props: TaskType): Promise<ApiResponse> {
+    try {
+        const result = await api.post(`/users/${props.userId}/tasks`, props); 
+        console.log(result.data);
+             
+        return result.data;
+    } catch (error: any) {
+        return error.response.data;
+    }
+}
+
 export async function listTasks(userId: string): Promise<ApiResponse> {
     try {
         const result = await api.get(`/users/${userId}/tasks`);
@@ -49,7 +60,7 @@ export async function listTasks(userId: string): Promise<ApiResponse> {
 export async function editTasks(props: TaskType): Promise<any> {
     try {
         const result = await api.put(`/users/${props.userId}/tasks/${props.id}`);
-        // console.log(result.data);
+        console.log(result.data);
         
         return result.data;
     } catch (error: any) {

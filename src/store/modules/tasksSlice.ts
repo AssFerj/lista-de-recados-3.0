@@ -1,11 +1,16 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { deleteTasks, editTasks, listTasks } from '../../services/api.service';
+import { createTask, deleteTasks, editTasks, listTasks } from '../../services/api.service';
 import Task from '../../types/TaskType';
 import TaskType from '../../types/TaskType';
 
 interface ListTaskProps {
   id: string;
 }
+
+export const createTaskAction = createAsyncThunk('tasks/create', async (props: TaskType) => {
+  const result = await createTask(props);
+  return result;
+});
 
 export const listTaskAction = createAsyncThunk('tasks/list', async (props: ListTaskProps) => {
   const result = await listTasks(props.id);

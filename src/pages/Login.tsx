@@ -12,12 +12,18 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { loginAction } from '../store/modules/userSlice';
+import { theme } from '../config/Theme/Theme';
+import { alpha } from '@mui/material';
 
 function Copyright(props: any) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://curriculum-web-j3bj.vercel.app/">
+      <Link color="inherit" href="https://curriculum-web-j3bj.vercel.app/" sx={{
+        "&:hover":{
+          color: `${theme.palette.primary.contrastText}`
+        }
+      }}>
         Assis Junior
       </Link>{' '}
       {new Date().getFullYear()}
@@ -78,6 +84,15 @@ export default function SignIn() {
             autoComplete="email"
             type='email'
             autoFocus
+            sx={{
+              borderRadius: 1,
+              borderColor: `${theme.palette.secondary.main}`,
+              background: `${theme.palette.primary.contrastText}`,
+              '&:Mui-focused': {
+                boxShadow: `${alpha(theme.palette.secondary.light, 0.25)} 0 0 0 0.2rem`,
+                borderColor: theme.palette.secondary.light,
+              }
+            }}
             value={email}
             onChange={(e)=>setEmail(e.target.value)}
           />
@@ -90,6 +105,15 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            sx={{
+              borderRadius: 1,
+              borderColor: `${theme.palette.secondary.main}`,
+              background: `${theme.palette.primary.contrastText}`,
+              '&:Mui-focused': {
+                boxShadow: `${alpha(theme.palette.secondary.light, 0.25)} 0 0 0 0.2rem`,
+                borderColor: theme.palette.secondary.light,
+              }
+            }}
             value={password}
             onChange={(e)=>setPassword(e.target.value)}
           />
@@ -97,20 +121,36 @@ export default function SignIn() {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ 
+              mt: 3, 
+              mb: 2,
+              background: `${theme.palette.secondary.dark}`,
+              "&:hover":{
+                background: `${theme.palette.primary.dark}`,
+                color: `${theme.palette.primary.contrastText}`
+              }
+            }}
           >
             Entrar
           </Button>
           <Grid container>
             <Grid item>
-              <Link href="/cadastro" variant="body2">
+              <Link href="/cadastro" variant="body2"
+                sx={{
+                  textDecoration: 'none',
+                  color: `${theme.palette.secondary.light}`,
+                  "&:hover":{
+                    color: `${theme.palette.primary.contrastText}`
+                  }
+                }}
+              >
                 {"Não tem uma conta? Cadastre-se"}
               </Link>
             </Grid>
           </Grid>
         </Box>
       </Box>
-      <Copyright sx={{ mt: 8, mb: 4 }} />
+      <Copyright sx={{ mt: 8, mb: 4, color: `${theme.palette.secondary.light}` }} />
     </Container>
   );
 }

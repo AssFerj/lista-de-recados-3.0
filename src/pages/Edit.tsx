@@ -1,18 +1,24 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
+import { editTaskAction } from '../store/modules/tasksSlice';
+import TaskType from '../types/TaskType';
+import { theme } from '../config/Theme/Theme';
+import { Typography, alpha } from '@mui/material';
 
 const Edit: React.FC = () => {
   const params = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [newDescription, setNewDescription] = useState('');
   const state = useSelector((state: RootState) => state.tasksReducer);
   const logedUser = useSelector((state: RootState)=> state.logedUserReducer); 
-  const taskToEdit = state.map(task =>task.id === params.id);
-  console.log(taskToEdit);
+  const taskToEdit = state.find(task =>task.id === params.id);
   
+  // console.log(logedUser);
   
   useEffect(() => {
     const isUserLoged = !!logedUser.id;
@@ -23,36 +29,56 @@ const Edit: React.FC = () => {
     }
   }, [logedUser, navigate]);
   
-  
+  const handleSetDescription = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setNewDescription(e.currentTarget.value);
+  };
+
   const handleEditTask = () => {
     if(params.id){
-      const findTask = state.find(task => task.id === params.id);
-      // console.log(findTask);
+      const taskEdit = {
+        id: params.id,
+        userId: logedUser.id,
+        newDescription
+      }
+      // dispatch(editTaskAction(taskEdit));
+      navigate('/home');
+      return;
     }
-
-    //   const logedUserId = logedUser.id
-    //   const editTask: TaskType = {
-    //     userId: logedUserId,
-    //     description: description
-    //   }
-    //   // dispatch(editTaskAction(editTask));
-
   };
 
   return (
     <React.Fragment>
       <h1>Editar recado</h1>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Descrição do recado"
-            type="text"
-            fullWidth
-            variant="standard"
-            value={params.description}
-          />
-          <Button variant='contained' sx={{marginTop: 2}} onClick={handleEditTask}>Editar</Button>
+      <Typography variant='body1'>{taskToEdit?.description}</Typography>
+      <TextField
+        autoFocus
+        margin="dense"
+        id="name"
+        label="Digite a nova descrição"
+        type={"text"}
+        fullWidth
+        variant="outlined"
+        sx={{
+          borderRadius: 1,
+          color: theme.palette.secondary.contrastText,
+          borderColor: `${theme.palette.secondary.main}`,
+          background: `${theme.palette.primary.contrastText}`,
+          '&:Mui-focused': {
+            boxShadow: `${alpha(theme.palette.secondary.light, 0.25)} 0 0 0 0.2rem`,
+            borderColor: theme.palette.secondary.light,
+          }
+        }}
+        value={newDescription}
+        onChange={e => handleSetDescription(e)}
+      />
+      <Button variant='contained' fullWidth sx={{
+        marginTop: 2,
+        background: `${theme.palette.secondary.dark}`,
+        "&:hover":{
+          background: `${theme.palette.primary.dark}`,
+          color: `${theme.palette.primary.contrastText}`
+        }
+      }} onClick={handleEditTask}>Editar</Button>
 
     </React.Fragment>
   );
