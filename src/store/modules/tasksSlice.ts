@@ -29,7 +29,6 @@ export const tasksSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(listTaskAction.pending, () => {
       console.log('List Task started');
-      
     })
     builder.addCase(listTaskAction.fulfilled, (_, action) => {
       console.log('List Task ended');
@@ -37,7 +36,6 @@ export const tasksSlice = createSlice({
     })
     builder.addCase(editTaskAction.pending, () => {
       console.log('Edit Task started');
-      
     })
     builder.addCase(editTaskAction.fulfilled, (_, action) => {
       console.log('Edit Task ended');
@@ -45,7 +43,6 @@ export const tasksSlice = createSlice({
     })
     builder.addCase(deleteTaskAction.pending, () => {
       console.log('Delete Task started');
-      
     })
     builder.addCase(deleteTaskAction.fulfilled, (_, action) => {
       console.log('Delete Task ended');
