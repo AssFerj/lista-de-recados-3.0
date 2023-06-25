@@ -77,7 +77,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
                   <IconButton onClick={()=>handleEdit(task.id)}>
                     <EditIcon/>
                   </IconButton>
-                  {/* <IconButton onClick={()=>handleClickOpen(task.id)}>
+                  {/* <IconButton onClick={()=>handleDelete(task.id)}>
                     <DeleteIcon/>
                   </IconButton> */}
                 </StyledTableCell>
