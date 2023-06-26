@@ -3,8 +3,17 @@ import { createTask, deleteTasks, editTasks, listTasks } from '../../services/ap
 import Task from '../../types/TaskType';
 import TaskType from '../../types/TaskType';
 
-interface ListTaskProps {
+export interface ListTaskProps {
   id: string;
+}
+
+export interface EditTaskProps {
+  userId: string;
+  taskId: string;
+}
+export interface DeleteTaskProps {
+  userId: string;
+  taskId: string;
 }
 
 export const createTaskAction = createAsyncThunk('tasks/create', async (props: TaskType) => {
@@ -17,12 +26,12 @@ export const listTaskAction = createAsyncThunk('tasks/list', async (props: ListT
   return result;
 });
 
-export const editTaskAction = createAsyncThunk('tasks/edit', async (props: TaskType) => {
+export const editTaskAction = createAsyncThunk('tasks/edit', async (props: EditTaskProps) => {
   const result = await editTasks(props);
   return result;
 });
 
-export const deleteTaskAction = createAsyncThunk('tasks/delete', async (props: TaskType) => {
+export const deleteTaskAction = createAsyncThunk('tasks/delete', async (props: DeleteTaskProps) => {
   const result = await deleteTasks(props);
   return result;
 });
@@ -37,7 +46,7 @@ export const tasksSlice = createSlice({
     })
     builder.addCase(listTaskAction.fulfilled, (_, action) => {
       console.log('List Task ended');
-      return action.payload.data;
+      return action.payload.data ?? [];
     })
     builder.addCase(editTaskAction.pending, () => {
       console.log('Edit Task started');
@@ -51,7 +60,7 @@ export const tasksSlice = createSlice({
     })
     builder.addCase(deleteTaskAction.fulfilled, (_, action) => {
       console.log('Delete Task ended');
-      return action.payload.data;
+      return action.payload.data ?? [];
     })
   }
 })

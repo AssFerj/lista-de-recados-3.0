@@ -2,6 +2,7 @@ import axios from 'axios';
 import LogedUserType from '../types/LogedUserType';
 import UserType from '../types/UserType';
 import TaskType from '../types/TaskType';
+import { DeleteTaskProps, EditTaskProps } from '../store/modules/tasksSlice';
 
 const api = axios.create({
     baseURL: 'http://localhost:3030'
@@ -57,9 +58,9 @@ export async function listTasks(userId: string): Promise<ApiResponse> {
     }
 }
 
-export async function editTasks(props: TaskType): Promise<any> {
+export async function editTasks(props: EditTaskProps): Promise<ApiResponse> {
     try {
-        const result = await api.put(`/users/${props.userId}/tasks/${props.id}`);
+        const result = await api.put(`/users/${props.userId}/tasks/${props.taskId}`);
         console.log(result.data);
         
         return result.data;
@@ -68,10 +69,10 @@ export async function editTasks(props: TaskType): Promise<any> {
     }
 }
 
-export async function deleteTasks(props: TaskType): Promise<any> {
+export async function deleteTasks(props: DeleteTaskProps): Promise<ApiResponse> {
     try {
-        const result = await api.delete(`/users/${props.userId}/tasks/${props.id}`);
-        // console.log(result.data);
+        const result = await api.delete(`/users/${props.userId}/tasks/${props.taskId}`);
+        console.log(result.data);
         
         return result.data;
     } catch (error: any) {

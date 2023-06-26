@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import TaskType from '../types/TaskType';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
@@ -10,10 +10,11 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TextField } from '@mui/material';
+import { IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
+import { deleteTaskAction } from '../store/modules/tasksSlice';
 
 export interface ListTasksProps {
   data: TaskType[];
@@ -42,7 +43,8 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const logedUser = useSelector((state: RootState)=> state.logedUserReducer); 
-    // console.log(logedUser);
+    const state = useSelector((state: RootState) => state.tasksReducer);
+    
     
     useEffect(() => {
       if(!logedUser.id){
@@ -53,6 +55,15 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
     const handleEdit = (taskId?: string) => {
       navigate(`/editar/${taskId}`);
+    };
+
+    const handleDelete = (taskToDelId?: string) => {
+      if(taskToDelId){
+        dispatch(deleteTaskAction({
+          userId: logedUser.id,
+          taskToDelId
+        }));
+      }
     };
 
 
@@ -77,9 +88,9 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
                   <IconButton onClick={()=>handleEdit(task.id)}>
                     <EditIcon/>
                   </IconButton>
-                  {/* <IconButton onClick={()=>handleDelete(task.id)}>
+                  <IconButton onClick={()=>handleDelete(task.id)}>
                     <DeleteIcon/>
-                  </IconButton> */}
+                  </IconButton>
                 </StyledTableCell>
                 </StyledTableRow>
               ))}
