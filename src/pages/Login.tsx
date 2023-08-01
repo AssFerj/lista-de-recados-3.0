@@ -38,7 +38,8 @@ export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const logedUser = useSelector((state: any)=> state.logedUserReducer);
-
+  console.log(logedUser);
+  
   useEffect(() => {
       if(logedUser.id){
       navigate('/home');
@@ -53,7 +54,7 @@ export default function SignIn() {
       password
     }
     dispatch(loginAction(logUser));
-    navigate('/home');
+    // navigate('/home');
     return;
   };
 

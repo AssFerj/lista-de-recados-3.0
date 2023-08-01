@@ -1,12 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import ListTasks from '../components/ListTasks';
 import { useDispatch, useSelector } from 'react-redux';
-import { listTaskAction } from '../store/modules/tasksSlice';
+import { createTaskAction, listTaskAction } from '../store/modules/tasksSlice';
 import { Button, Grid, TextField, Typography, alpha } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { RootState } from '../store';
 import { theme } from '../config/Theme/Theme';
-import { createUserAction } from '../store/modules/usersSlice';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -43,7 +42,7 @@ const Home: React.FC = () => {
         userId: logedUser.id,
         description
       }   
-      // dispatch(createUserAction(taskToCreate));
+      dispatch(createTaskAction(taskToCreate));
     }
     navigate('/');
     return;
@@ -68,7 +67,7 @@ const Home: React.FC = () => {
           />
         </Grid>
         <Grid item xl={4}>
-          <Button type='submit' variant='contained' fullWidth sx={{
+          <Button type='button' variant='contained' fullWidth sx={{
             height: '100%',
             background: `${theme.palette.secondary.dark}`,
             "&:hover":{
@@ -76,6 +75,7 @@ const Home: React.FC = () => {
               color: `${theme.palette.primary.contrastText}`
             }
           }}
+          onClick={()=>handleCreateTask}
           >Cadastrar</Button>
         </Grid>
       </Grid>

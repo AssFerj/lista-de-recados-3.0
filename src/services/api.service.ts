@@ -5,7 +5,7 @@ import TaskType from '../types/TaskType';
 import { DeleteTaskProps, EditTaskProps } from '../store/modules/tasksSlice';
 
 const api = axios.create({
-    baseURL: 'http://localhost:3030'
+    baseURL: 'http://localhost:5432'
 });
 
 interface ApiResponse {

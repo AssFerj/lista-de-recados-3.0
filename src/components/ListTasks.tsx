@@ -43,7 +43,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const logedUser = useSelector((state: RootState)=> state.logedUserReducer); 
-    const state = useSelector((state: RootState) => state.tasksReducer);
+    // const state = useSelector((state: RootState) => state.tasksReducer);
     
     
     useEffect(() => {
@@ -57,11 +57,11 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
       navigate(`/editar/${taskId}`);
     };
 
-    const handleDelete = (taskToDelId?: string) => {
+    const handleDelete = (taskToDelId: string) => {
       if(taskToDelId){
         dispatch(deleteTaskAction({
           userId: logedUser.id,
-          taskToDelId
+          taskId: taskToDelId
         }));
       }
     };
