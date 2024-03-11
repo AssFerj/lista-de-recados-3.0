@@ -1,81 +1,54 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from 'axios';
-import LogedUserType from '../types/LogedUserType';
 import UserType from '../types/UserType';
 import TaskType from '../types/TaskType';
-import { DeleteTaskProps, EditTaskProps } from '../store/modules/tasksSlice';
 
+const token = localStorage.getItem('authToken')
 const api = axios.create({
-    baseURL: 'http://localhost:5432'
+    baseURL: import.meta.env.VITE_API_URL as string,
+    headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+    }
 });
 
-interface ApiResponse {
-    ok: boolean;
-    message: string;
-    data?: any;
+export const validateUser = async (email: string) => {
+    const response = await api.get(`/user/${email}`)
+    return response.data.data;
+}
+export const signIn = async (props: UserType) => {
+    const response = await api.post(`/login`, props)
+    return response.data.data;
+}
+export const signOut = async () => {
+    localStorage.removeItem('user')
+    sessionStorage.removeItem('authToken')
+    return
 }
 
-export async function createUser(props: UserType): Promise<ApiResponse> {
-    try {
-        const result = await api.post(`/users`, props); 
-        // console.log(result.data);
-             
-        return result.data;
-    } catch (error: any) {
-        return error.response.data;
-    }
+export const createUser = async (props: UserType) => {
+    const response = await api.post(`/user`, props)
+    return response.data.data
 }
 
-export async function login(props: LogedUserType): Promise<ApiResponse> {
-    try {
-        const result = await api.post(`/users/login`, props);
-        // console.log(result.data);
-        
-        return result.data;
-    } catch (error: any) {
-        return error.response.data;
-    }
+export const createTask = async (props: TaskType) => {
+    const response = await api.post(`/user/${props.user_id}/task`, props)
+    return response.data.data
 }
 
-export async function createTask(props: TaskType): Promise<ApiResponse> {
-    try {
-        const result = await api.post(`/users/${props.userId}/tasks`, props); 
-        console.log(result.data);
-             
-        return result.data;
-    } catch (error: any) {
-        return error.response.data;
-    }
+export const getTasks = async (props: UserType) => {
+    const response = await api.get(`/user/${props.id}/task`)
+    return response.data.data
 }
 
-export async function listTasks(userId: string): Promise<ApiResponse> {
-    try {
-        const result = await api.get(`/users/${userId}/tasks`);
-        // console.log(result.data);
-        
-        return result.data;
-    } catch (error: any) {
-        return error.response.data;
-    }
+export const updateTask = async (props: TaskType) => {
+    const response = await api.put(`/user/${props.user_id}/task/${props.id}`, props)
+    return response.data.data
 }
 
-export async function editTasks(props: EditTaskProps): Promise<ApiResponse> {
-    try {
-        const result = await api.put(`/users/${props.userId}/tasks/${props.taskId}`);
-        console.log(result.data);
-        
-        return result.data;
-    } catch (error: any) {
-        return error.response.data;
-    }
+export const deleteTask = async (props: TaskType) => {
+    const response = await api.delete(`/user/${props.user_id}/task/${props.id}`)
+    return response.data.data
 }
 
-export async function deleteTasks(props: DeleteTaskProps): Promise<ApiResponse> {
-    try {
-        const result = await api.delete(`/users/${props.userId}/tasks/${props.taskId}`);
-        console.log(result.data);
-        
-        return result.data;
-    } catch (error: any) {
-        return error.response.data;
-    }
-}
+

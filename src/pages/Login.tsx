@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -9,11 +10,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { loginAction } from '../store/modules/userSlice';
-import { theme } from '../config/Theme/Theme';
-import { alpha } from '@mui/material';
+import { signIn } from '../services/api.service';
+import UserType from '../types/UserType';
 
 function Copyright(props: any) {
   return (
@@ -21,7 +20,7 @@ function Copyright(props: any) {
       {'Copyright © '}
       <Link color="inherit" href="https://curriculum-web-j3bj.vercel.app/" sx={{
         "&:hover":{
-          color: `${theme.palette.primary.contrastText}`
+          // color: `${theme.palette.primary.contrastText}`
         }
       }}>
         Assis Junior
@@ -33,46 +32,44 @@ function Copyright(props: any) {
 }
 
 export default function SignIn() {
-  const dispatch = useDispatch<any>();
-  const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const logedUser = useSelector((state: any)=> state.logedUserReducer);
-  console.log(logedUser);
-  
-  useEffect(() => {
-      if(logedUser.id){
-      navigate('/home');
-      return;
-    }
-  }, [logedUser, navigate]);
+  const navigate = useNavigate()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loggedUser, setLoggedUser] = useState<UserType>({})
 
-  const submitLogin = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const logUser = {
-      email,
-      password
+  useEffect(()=>{
+    if (loggedUser && loggedUser.token) {
+      localStorage.setItem('user', JSON.stringify(loggedUser));
+      sessionStorage.setItem('authToken', loggedUser.token);
+      navigate('/home');
     }
-    dispatch(loginAction(logUser));
-    // navigate('/home');
-    return;
+  }, [loggedUser, navigate])
+
+  const submitLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    try {
+      const newLogUser = await signIn({ email, password });
+      setLoggedUser(newLogUser);
+    } catch (error) {
+      console.log(error, 'Submit Login')
+    }
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" sx={{height: '50%', p: 5, mt: '10%'}}>
       <Box
         sx={{
-          marginTop: 8,
+          marginTop: 3,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+        <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
-          Recados 3.0 - Login
+        <Typography variant="h5" /*color={themeDark.palette.primary.contrastText}*/>
+          Task-In - Login
         </Typography>
         <Box component="form" onSubmit={submitLogin} noValidate sx={{ mt: 1 }}>
           <TextField
@@ -85,15 +82,6 @@ export default function SignIn() {
             autoComplete="email"
             type='email'
             autoFocus
-            sx={{
-              borderRadius: 1,
-              borderColor: `${theme.palette.secondary.main}`,
-              background: `${theme.palette.primary.contrastText}`,
-              '&:Mui-focused': {
-                boxShadow: `${alpha(theme.palette.secondary.light, 0.25)} 0 0 0 0.2rem`,
-                borderColor: theme.palette.secondary.light,
-              }
-            }}
             value={email}
             onChange={(e)=>setEmail(e.target.value)}
           />
@@ -106,15 +94,6 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
-            sx={{
-              borderRadius: 1,
-              borderColor: `${theme.palette.secondary.main}`,
-              background: `${theme.palette.primary.contrastText}`,
-              '&:Mui-focused': {
-                boxShadow: `${alpha(theme.palette.secondary.light, 0.25)} 0 0 0 0.2rem`,
-                borderColor: theme.palette.secondary.light,
-              }
-            }}
             value={password}
             onChange={(e)=>setPassword(e.target.value)}
           />
@@ -125,33 +104,20 @@ export default function SignIn() {
             sx={{ 
               mt: 3, 
               mb: 2,
-              background: `${theme.palette.secondary.dark}`,
-              "&:hover":{
-                background: `${theme.palette.primary.dark}`,
-                color: `${theme.palette.primary.contrastText}`
-              }
             }}
           >
             Entrar
           </Button>
           <Grid container>
             <Grid item>
-              <Link href="/cadastro" variant="body2"
-                sx={{
-                  textDecoration: 'none',
-                  color: `${theme.palette.secondary.light}`,
-                  "&:hover":{
-                    color: `${theme.palette.primary.contrastText}`
-                  }
-                }}
-              >
+              <Link href="/cadastro" variant="body2">
                 {"Não tem uma conta? Cadastre-se"}
               </Link>
             </Grid>
           </Grid>
         </Box>
       </Box>
-      <Copyright sx={{ mt: 8, mb: 4, color: `${theme.palette.secondary.light}` }} />
+      <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   );
 }

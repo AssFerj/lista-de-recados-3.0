@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -9,10 +10,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { createUser } from '../services/api.service';
-import { createUserAction } from '../store/modules/usersSlice';
 
 function Copyright(props: any) {
   return (
@@ -28,28 +27,24 @@ function Copyright(props: any) {
 }
 
 export default function SignUp() {
-  const dispatch = useDispatch<any>();
   const navigate = useNavigate();
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const submitregister = (event: React.FormEvent<HTMLFormElement>) => {
+  const submitregister = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const userToCreate = {
-      firstName,
-      lastName,
-      email,
-      password
-    }   
-    dispatch(createUserAction(userToCreate));
-    navigate('/');
-    return;
+    try {
+      await createUser({name, email, password})
+      navigate('/');
+      return;
+    } catch (error) {
+      console.log(error, 'Submit Register');
+    }
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" sx={{height: '50%', p: 5, mt: '8%'}}>
       <Box
         sx={{
           marginTop: 8,
@@ -58,36 +53,26 @@ export default function SignUp() {
           alignItems: 'center',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+        <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Recados 3.0 - Cadastro
+          Task-In - Cadastro
         </Typography>
-        <Box component="form" onSubmit={submitregister} noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={submitregister} noValidate sx={{ mt: 2 }}>
           <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
             <TextField
                 sx={{marginRight: 1}}
                 required
-                id="firstName"
+                fullWidth
+                id="name"
                 label="Nome"
-                name="firstName"
-                autoComplete="firstName"
+                name="name"
+                autoComplete="name"
                 type='text'
                 autoFocus
-                value={firstName}
-                onChange={(e)=>setFirstName(e.target.value)}
-              />
-              <TextField
-                required
-                id="lastName"
-                label="Sobrenome"
-                name="lastName"
-                autoComplete="lastName"
-                type='text'
-                autoFocus
-                value={lastName}
-                onChange={(e)=>setLastName(e.target.value)}
+                value={name}
+                onChange={(e)=>setName(e.target.value)}
               />
           </Box>
           <TextField
@@ -136,4 +121,3 @@ export default function SignUp() {
     </Container>
   );
 }
-
