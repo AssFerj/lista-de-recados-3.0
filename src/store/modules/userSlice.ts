@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import LogedUserType from '../../types/LogedUserType';
-import { login } from '../../services/api.service';
+import { signIn } from '../../services/api.service';
 
 export const loginAction = createAsyncThunk('logedUser/login', async (props: LogedUserType) => {
-  const result = await login(props);
+  const result = await signIn(props);
   return result;
 })
 

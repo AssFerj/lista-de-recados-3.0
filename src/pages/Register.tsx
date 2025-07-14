@@ -12,6 +12,7 @@ import Container from '@mui/material/Container';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { createUser } from '../services/api.service';
+import UserType from '../types/UserType';
 
 function Copyright(props: any) {
   return (
@@ -35,7 +36,7 @@ export default function SignUp() {
   const submitregister = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      await createUser({name, email, password})
+      await createUser({ name, email, password } as UserType);
       navigate('/');
       return;
     } catch (error) {

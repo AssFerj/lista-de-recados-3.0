@@ -16,23 +16,25 @@ export const validateUser = async (email: string) => {
     const response = await api.get(`/user/${email}`)
     return response.data.data;
 }
-export const signIn = async (props: UserType) => {
-    const response = await api.post(`/login`, props)
+
+export const signIn = async (user: Pick<UserType, 'email' | 'password'>) => {
+    const response = await api.post(`/login`, user)
     return response.data.data;
 }
+
 export const signOut = async () => {
     localStorage.removeItem('user')
     sessionStorage.removeItem('authToken')
     return
 }
 
-export const createUser = async (props: UserType) => {
-    const response = await api.post(`/user`, props)
+export const createUser = async (user: UserType) => {
+    const response = await api.post(`/user`, user)
     return response.data.data
 }
 
 export const createTask = async (props: TaskType) => {
-    const response = await api.post(`/user/${props.user_id}/task`, props)
+    const response = await api.post(`/user/${props.userId}/task`, props)
     return response.data.data
 }
 
@@ -41,14 +43,12 @@ export const getTasks = async (props: UserType) => {
     return response.data.data
 }
 
-export const updateTask = async (props: TaskType) => {
-    const response = await api.put(`/user/${props.user_id}/task/${props.id}`, props)
+export const editTask = async (props: TaskType) => {
+    const response = await api.put(`/user/${props.userId}/task/${props.id}`, props)
     return response.data.data
 }
 
 export const deleteTask = async (props: TaskType) => {
-    const response = await api.delete(`/user/${props.user_id}/task/${props.id}`)
+    const response = await api.delete(`/user/${props.userId}/task/${props.id}`)
     return response.data.data
 }
-
-

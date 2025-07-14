@@ -12,8 +12,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+
 import { deleteTaskAction } from '../store/modules/tasksSlice';
 
 export interface ListTasksProps {
@@ -41,9 +41,9 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
   const ListTasks: React.FC<ListTasksProps> = ({ data }) => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const logedUser = useSelector((state: RootState)=> state.logedUserReducer); 
-    // const state = useSelector((state: RootState) => state.tasksReducer);
+    const dispatch = useAppDispatch();
+    const logedUser = useAppSelector((state) => state.logedUserReducer); 
+    // const state = useAppSelector((state: RootState) => state.tasksReducer);
     
     
     useEffect(() => {
@@ -58,10 +58,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     };
 
     const handleDelete = (taskToDelId: string) => {
-      if(taskToDelId){
+      if(taskToDelId && logedUser.id){
         dispatch(deleteTaskAction({
           userId: logedUser.id,
-          taskId: taskToDelId
+          id: taskToDelId
         }));
       }
     };
@@ -88,7 +88,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
                   <IconButton onClick={()=>handleEdit(task.id)}>
                     <EditIcon/>
                   </IconButton>
-                  <IconButton onClick={()=>handleDelete(task.id)}>
+                  <IconButton onClick={()=>task.id && handleDelete(task.id)}>
                     <DeleteIcon/>
                   </IconButton>
                 </StyledTableCell>

@@ -1,4 +1,13 @@
 {
+    "builds": [
+        {
+            "src": "package.json",
+            "use": "@vercel/static-build",
+            "config": {
+                "distDir": "dist"
+            }
+        }
+    ],
     "routes": [
       {
         "src": "/api/(.*)",
@@ -6,7 +15,8 @@
         "headers": {
           "Access-Control-Allow-Origin": "https://tasks.assisjuniorwm.com.br"
         }
-      }
+      },
+      { "src": "/(.*)", "dest": "/index.html" }
     ]
   }
   

@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../store';
-import { editTaskAction } from '../store/modules/tasksSlice';
-import TaskType from '../types/TaskType';
+
+
 import { theme } from '../config/Theme/Theme';
 import { Typography, alpha } from '@mui/material';
 
 const Edit: React.FC = () => {
   const params = useParams();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  
   const [newDescription, setNewDescription] = useState('');
   const state = useSelector((state: RootState) => state.tasksReducer);
   const logedUser = useSelector((state: RootState)=> state.logedUserReducer); 
@@ -35,11 +35,7 @@ const Edit: React.FC = () => {
 
   const handleEditTask = () => {
     if(params.id){
-      const taskEdit = {
-        id: params.id,
-        userId: logedUser.id,
-        newDescription
-      }
+      
       // dispatch(editTaskAction(taskEdit));
       navigate('/home');
       return;

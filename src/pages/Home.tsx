@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import '../app.css'
-import React, { useEffect, useMemo, useState } from 'react';
+import '../App.css'
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Button, Grid, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography, styled, tableCellClasses } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { createTask, deleteTask, getTasks, updateTask } from '../services/api.service';
+import { createTask, deleteTask, getTasks, editTask } from '../services/api.service';
 import TaskType from '../types/TaskType';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -68,17 +68,20 @@ const Home: React.FC = () => {
     return deepEqual(obj1, obj2)
   };
   
-  const handleList = async () => {
+  const handleList = useCallback(async () => {
     try {
-      const data = await getTasks(user)
-      if (!isEqual(data, tasks)) {
-        setTasks(data)
-      }
+      const data = await getTasks(user);
+      setTasks(prevTasks => {
+        if (!isEqual(data, prevTasks)) {
+          return data;
+        }
+        return prevTasks;
+      });
     } catch (error) {
-      console.log(error, 'Fetch Tasks Error')
+      console.log(error, 'Fetch Tasks Error');
     }
-  };
-  
+  }, [user]);
+
   useEffect(() => {
     if (!token || !user) {
       navigate('/')
@@ -86,17 +89,17 @@ const Home: React.FC = () => {
       // console.log('Token:', token);
       handleList()
     } return
-  },[token, user, tasks])
+  }, [token, user, navigate, handleList]);
 
   const handleEdit = async () => {
     try {
       if (currentTask) {
         const taskToUpdate: TaskType = {
           id: currentTask.id,
-          user_id: user.id!,
+          userId: user.id!,
           description: newDescription,
         };
-        await updateTask(taskToUpdate)
+        await editTask(taskToUpdate)
       }
       setNewDescription('')
       setAlertState({
@@ -114,7 +117,7 @@ const Home: React.FC = () => {
     }
   }
   
-  const handleDelete = async (task: TaskType) => {
+  const handleDelete = useCallback(async (task: TaskType) => {
     try {     
       await deleteTask(task)
       handleList();
@@ -132,7 +135,7 @@ const Home: React.FC = () => {
         typeAlert: 'error',
       });
     }
-  }
+  }, [handleList]);
 
   const listTasks = useMemo(() => {
     if(tasks.length > 0){
@@ -167,13 +170,13 @@ const Home: React.FC = () => {
       )
     }
       return (<Typography mt={3}>Nenhuma tarefa cadastrada</Typography>)
-  },[tasks]);
+  }, [tasks, handleDelete]);
 
   const handleCreateTask = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
       const newTask = {
-        user_id: user.id!,
+        userId: user.id!,
         description
       }
       await createTask(newTask);

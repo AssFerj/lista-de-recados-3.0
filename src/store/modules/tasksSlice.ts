@@ -1,38 +1,35 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { createTask, deleteTasks, editTasks, listTasks } from '../../services/api.service';
+import { createTask, deleteTask, editTask, getTasks } from '../../services/api.service';
 import Task from '../../types/TaskType';
 import TaskType from '../../types/TaskType';
+import UserType from '../../types/UserType';
 
 export interface ListTaskProps {
   id: string;
 }
 
-export interface EditTaskProps {
+interface DeleteTaskProps {
   userId: string;
-  taskId: string;
-}
-export interface DeleteTaskProps {
-  userId: string;
-  taskId: string;
+  id: string;
 }
 
-export const createTaskAction = createAsyncThunk('tasks/create', async (props: TaskType) => {
-  const result = await createTask(props);
+export const createTaskAction = createAsyncThunk('tasks/create', async (task: TaskType) => {
+  const result = await createTask(task);
   return result;
 });
 
-export const listTaskAction = createAsyncThunk('tasks/list', async (props: ListTaskProps) => {
-  const result = await listTasks(props.id);
+export const getTasksAction = createAsyncThunk('tasks/list', async (user: UserType) => {
+  const result = await getTasks(user);
   return result;
 });
 
-export const editTaskAction = createAsyncThunk('tasks/edit', async (props: EditTaskProps) => {
-  const result = await editTasks(props);
+export const editTaskAction = createAsyncThunk('tasks/edit', async (task: TaskType) => {
+  const result = await editTask(task);
   return result;
 });
 
 export const deleteTaskAction = createAsyncThunk('tasks/delete', async (props: DeleteTaskProps) => {
-  const result = await deleteTasks(props);
+  const result = await deleteTask(props as TaskType);
   return result;
 });
 
@@ -41,10 +38,10 @@ export const tasksSlice = createSlice({
   initialState: [] as Task[],
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(listTaskAction.pending, () => {
+    builder.addCase(getTasksAction.pending, () => {
       console.log('List Task started');
     })
-    builder.addCase(listTaskAction.fulfilled, (_, action) => {
+    builder.addCase(getTasksAction.fulfilled, (_, action) => {
       console.log('List Task ended');
       return action.payload.data ?? [];
     })

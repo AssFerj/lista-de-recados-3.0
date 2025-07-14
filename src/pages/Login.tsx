@@ -35,7 +35,7 @@ export default function SignIn() {
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [loggedUser, setLoggedUser] = useState<UserType>({})
+  const [loggedUser, setLoggedUser] = useState<UserType | null>(null)
 
   useEffect(()=>{
     if (loggedUser && loggedUser.token) {
@@ -49,6 +49,9 @@ export default function SignIn() {
     event.preventDefault()
     try {
       const newLogUser = await signIn({ email, password });
+      if (newLogUser.token) {
+        sessionStorage.setItem('authToken', newLogUser.token);
+      }
       setLoggedUser(newLogUser);
     } catch (error) {
       console.log(error, 'Submit Login')

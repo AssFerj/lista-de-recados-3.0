@@ -1,11 +1,12 @@
 import TaskType from './TaskType';
 
-interface UserType {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
+type UserType = {
+  id?: string;
+  name?: string;
+  email?: string;
+  password?: string;
+  token?: string;
   tasks?: TaskType[];
-}
+};
 
 export default UserType;
