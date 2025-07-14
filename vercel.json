@@ -4,7 +4,7 @@
         "src": "/api/(.*)",
         "dest": "https://tasks-api-omega.vercel.app/$1",
         "headers": {
-          "Access-Control-Allow-Origin": "https://tasks-api-omega.vercel.app"
+          "Access-Control-Allow-Origin": "https://lista-de-recados-3-0.vercel.app"
         }
       }
     ]
